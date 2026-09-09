@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ntm.dev/schemas/novel-to-manhwa/v1/panel-generation-request.schema.json",
+  "title": "NTM panel generation request v1",
+  "description": "Provider-neutral, reproducible request for one storyboard panel.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "request_id",
+    "chapter_id",
+    "scene_id",
+    "panel_index",
+    "send_order",
+    "detailed_prompt",
+    "negative_prompt",
+    "composition",
+    "camera",
+    "lighting",
+    "style",
+    "expected_text_bubbles",
+    "visible_entities",
+    "relevant_offscreen_entities",
+    "resolved_canonical_states",
+    "spatial_relationships",
+    "required_references",
+    "required_textures",
+    "provider_parameters",
+    "prompt_version",
+    "global_context_hash"
+  ],
+  "properties": {
+    "request_id": {"$ref": "#/$defs/id"},
+    "chapter_id": {"$ref": "#/$defs/id"},
+    "scene_id": {"$ref": "#/$defs/id"},
+    "panel_index": {"type": "integer", "minimum": 0},
+    "send_order": {"type": "integer", "minimum": 0},
+    "detailed_prompt": {"type": "string", "minLength": 20},
+    "negative_prompt": {"type": "string", "minLength": 1},
+    "composition": {"$ref": "#/$defs/description"},
+    "camera": {"$ref": "#/$defs/description"},
+    "lighting": {"$ref": "#/$defs/description"},
+    "style": {"$ref": "#/$defs/description"},
+    "expected_text_bubbles": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/textBubble"}
+    },
+    "visible_entities": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/entityPresence"}
+    },
+    "relevant_offscreen_entities": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/offscreenEntity"}
+    },
+    "resolved_canonical_states": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/resolvedState"}
+    },
+    "spatial_relationships": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/spatialRelationship"}
+    },
+    "required_references": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/reference"}
+    },
+    "required_textures": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/textureRequirement"}
+    },
+    "provider_parameters": {"type": "object"},
+    "prompt_version": {"type": "string", "minLength": 1},
+    "global_context_hash": {"type": "string", "pattern": "^[A-Fa-f0-9]{64}$"}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+    "description": {"type": "string", "minLength": 1},
+    "textBubble": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bubble_id", "text", "kind"],
+      "properties": {
+        "bubble_id": {"$ref": "#/$defs/id"},
+        "text": {"type": "string", "minLength": 1},
+        "kind": {"type": "string", "enum": ["dialogue", "thought", "narration", "sfx", "caption"]},
+        "speaker_entity_id": {"$ref": "#/$defs/id"},
+        "placement": {"$ref": "#/$defs/description"}
+      }
+    },
+    "entityPresence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["entity_id", "presentation"],
+      "properties": {
+        "entity_id": {"$ref": "#/$defs/id"},
+        "presentation": {"$ref": "#/$defs/description"}
+      }
+    },
+    "offscreenEntity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["entity_id", "relevance"],
+      "properties": {
+        "entity_id": {"$ref": "#/$defs/id"},
+        "relevance": {"$ref": "#/$defs/description"}
+      }
+    },
+    "resolvedState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["entity_id", "state"],
+      "properties": {
+        "entity_id": {"$ref": "#/$defs/id"},
+        "state": {"type": "object"},
+        "state_hash": {"type": "string", "pattern": "^[A-Fa-f0-9]{64}$"}
+      }
+    },
+    "spatialRelationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["subject_entity_id", "relation", "object_entity_id"],
+      "properties": {
+        "subject_entity_id": {"$ref": "#/$defs/id"},
+        "relation": {"$ref": "#/$defs/description"},
+        "object_entity_id": {"$ref": "#/$defs/id"}
+      }
+    },
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reference_id", "path", "role"],
+      "properties": {
+        "reference_id": {"$ref": "#/$defs/id"},
+        "path": {"type": "string", "pattern": "^references/[a-z][a-z0-9_]*/[^/]+$"},
+        "role": {"type": "string", "enum": ["identity", "material", "texture", "outfit", "location", "pose"]}
+      }
+    },
+    "textureRequirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["entity_id", "texture"],
+      "properties": {
+        "entity_id": {"$ref": "#/$defs/id"},
+        "texture": {"$ref": "#/$defs/description"},
+        "reference_id": {"$ref": "#/$defs/id"}
+      }
+    }
+  },
+  "x-ntm-storage": {
+    "directory": "generation/requests/<chapter_id>/",
+    "filename": "<request_id>.json",
+    "filename_must_match": "request_id"
+  }
+}

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
 from pathlib import Path
 
 DIRECTORIES = (
@@ -23,6 +24,7 @@ DIRECTORIES = (
 )
 
 README = """# Novel To Manhwa project\n\nThis project is canon-first: structured files are authoritative; an LLM context is not.\n\n1. Put immutable novel files in `story/source/`.\n2. Create sourced entities in `canon/entities/` and transitions in `canon/events/`.\n3. Resolve a scene state before writing storyboards or generation requests.\n4. Write a continuity report for every chapter; `final` requires no open blocker.\n\nDo not overwrite canonical facts to hide contradictions. Preserve evidence and record a decision event.\n"""
+SCRIPT_DIR = Path(__file__).resolve().parent
 
 
 def write_file(path: Path, content: str, force: bool) -> bool:
@@ -50,6 +52,20 @@ def main() -> int:
         "Generated continuity reports are retained here.\n",
         args.force,
     )
+    write_file(
+        root / "generation" / "requests" / "README.md",
+        "# Panel generation requests\n\n"
+        "Store each request at `<chapter_id>/<request_id>.json`. The filename must "
+        "match the request's `request_id`. Validate storage with "
+        "`tools/validate_generation_requests.py generation/requests`.\n",
+        args.force,
+    )
+    validator_target = root / "tools" / "validate_generation_requests.py"
+    if not validator_target.exists() or args.force:
+        shutil.copyfile(SCRIPT_DIR / "validate_generation_requests.py", validator_target)
+        print(f"wrote {validator_target}")
+    else:
+        print(f"preserved {validator_target}")
     manifest = {"format": "ntm-project/v1", "canon_policy": "canon_over_model_memory", "status": "initialized"}
     write_file(root / "ntm-project.json", json.dumps(manifest, indent=2) + "\n", args.force)
     return 0
