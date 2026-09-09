@@ -1,0 +1,9 @@
+{
+  "chapter_id": "chapter_001",
+  "status": "ready_for_review",
+  "checks": [
+    {"name": "timeline", "status": "pass", "detail": "No ordering conflicts found."},
+    {"name": "visual_qa", "status": "not_run", "detail": "No vision provider is configured."}
+  ],
+  "findings": []
+}
