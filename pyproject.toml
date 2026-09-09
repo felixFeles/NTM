@@ -5,8 +5,11 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "ntm"
 version = "0.1.0"
-description = "Novel To Manhwa canon ingestion safeguards"
-requires-python = ">=3.11"
+description = "Deterministic story ingestion and continuity retrieval"
+requires-python = ">=3.10"
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
