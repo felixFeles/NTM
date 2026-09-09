@@ -1,17 +1,107 @@
-# NTM
-Novel To Manhwa
+# NTM — Novel To Manhwa
 
-## Continuité narrative
+**NTM is a Codex plugin that gives every Codex agent the same canon-first workflow for turning a long novel into a continuity-safe manhwa production pipeline.** It does not pretend that an LLM's memory is the source of truth, nor does it lock you into a particular image, OCR, vision, or LLM provider.
 
-Les chapitres Markdown ou texte placés dans `story/source/` sont importés avec
-`StoryIngestor`. Chaque occurrence conserve un localisateur stable
-`fichier:p<paragraphe>:s<phrase>` et le manifeste contient le SHA-256 de chaque
-source. Le front matter optionnel distingue explicitement `publication_order`,
-`chronological_order`, `flashback` et `flashback_of`.
+## Install for any Codex agent
 
-`HybridStoryIndex` combine une recherche lexicale, une similarité TF-IDF, un
-graphe d'entités/événements et les deux timelines. Après avoir enregistré les
-entités et événements, utilisez `retrieve_entity_context(entity_id, chapter_id,
-direction)` ou `retrieve_chapter_context(chapter_id)`. Les résultats séparent
-les occurrences antérieures et postérieures, événements causaux, contradictions
-potentielles et sources auditables.
+```bash
+git clone <YOUR_GITHUB_REPOSITORY_URL> ntm
+cd ntm
+codex plugin marketplace add .
+```
+
+Then install **Novel To Manhwa** from the Codex plugin marketplace and open Codex in this cloned directory. The plugin supplies the `novel-to-manhwa` skill automatically, so every agent gets the same operating rules and project structure.
+
+> The marketplace command is intentionally repository-local: contributors clone the same repository, install the same plugin version, and work from the same repeatable instructions. If your Codex build uses a graphical plugin installer, select the cloned repository's `.agents/plugins/marketplace.json` instead.
+
+## What the plugin enforces
+
+* **Canonical single source of truth:** typed, immutable entity IDs and sourced facts.
+* **Long-distance continuity:** retrieval of prior entity appearances and state before new scenes are planned.
+* **Temporal safety:** deterministic checks for ownership, location, injuries, wardrobe, life status, knowledge, and powers.
+* **Visual consistency:** canonical image/reference metadata is attached to generation requests rather than recreated from prose.
+* **Honest QA:** visual checks are only marked passed when a configured vision provider actually runs; otherwise they remain `not_run`.
+* **Auditable completion:** a chapter cannot be `final` with unresolved blocking findings.
+
+The governing priority is:
+
+```text
+CANON > CONTINUITY > STORYBOARD > AESTHETICS > SPEED
+```
+
+## Narrative continuity
+
+Chapters written in Markdown or plain text and placed in `story/source/` are imported through `StoryIngestor`.
+
+Each occurrence receives a stable locator in the form:
+
+```text
+fichier:p<paragraphe>:s<phrase>
+```
+
+The manifest also stores the SHA-256 hash of every source file, making the imported canon auditable and allowing changes to source material to be detected.
+
+Optional front matter explicitly distinguishes:
+
+* `publication_order`
+* `chronological_order`
+* `flashback`
+* `flashback_of`
+
+This separation is important because publication order and chronological order are not necessarily identical.
+
+## Hybrid story retrieval
+
+`HybridStoryIndex` combines several complementary retrieval mechanisms:
+
+* lexical search;
+* TF-IDF similarity;
+* an entity/event graph;
+* publication and chronological timelines.
+
+After entities and events have been registered, agents can retrieve continuity context with:
+
+```text
+retrieve_entity_context(entity_id, chapter_id, direction)
+retrieve_chapter_context(chapter_id)
+```
+
+The resulting context separates:
+
+* previous occurrences;
+* subsequent occurrences;
+* causal events;
+* potential contradictions;
+* auditable source references.
+
+This allows an agent to retrieve the relevant canon before planning or generating a new scene, including information that may be separated from the current chapter by hundreds of chapters.
+
+## Canon-first production pipeline
+
+The intended workflow is:
+
+```text
+SOURCE NOVEL
+    ↓
+StoryIngestor
+    ↓
+Canonical story index
+    ↓
+Entity / event / timeline retrieval
+    ↓
+Continuity validation
+    ↓
+Storyboard
+    ↓
+Visual references
+    ↓
+Manhwa generation
+    ↓
+Visual + narrative QA
+    ↓
+Final chapter
+```
+
+No downstream stage should silently overwrite established canon.
+
+When information conflicts, the source material and canonical state take precedence over an LLM's assumptions or previous generated output.
