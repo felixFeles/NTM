@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NTM — Revue des conflits canoniques</title>
+  <style>
+    body { font: 16px/1.5 system-ui, sans-serif; margin: 2rem auto; max-width: 72rem; color: #1e293b; }
+    textarea { box-sizing: border-box; min-height: 13rem; width: 100%; font-family: ui-monospace, monospace; }
+    article { border-left: .35rem solid #b91c1c; background: #fff7ed; margin: 1rem 0; padding: 1rem; }
+    .blocked { color: #991b1b; font-weight: 700; } code { background: #e2e8f0; padding: .1rem .25rem; }
+  </style>
+</head>
+<body>
+  <h1>Revue des conflits canoniques</h1>
+  <p class="blocked">BLOQUANT — aucune adaptation ne doit avancer avant une décision éditoriale.</p>
+  <p>Collez le JSON produit par <code>IngestionResult.conflict_report()</code>. Le fait publié indiqué est une référence prioritaire, pas une résolution automatique.</p>
+  <textarea id="payload" aria-label="Rapport JSON des conflits" placeholder='{"conflicts": []}'></textarea>
+  <section id="results" aria-live="polite"></section>
+  <script>
+    const input = document.querySelector('#payload');
+    const results = document.querySelector('#results');
+    input.addEventListener('input', () => {
+      try {
+        const { conflicts = [] } = JSON.parse(input.value || '{"conflicts": []}');
+        results.replaceChildren(...conflicts.map(conflict => {
+          const card = document.createElement('article');
+          card.innerHTML = `<h2>${conflict.claim_key}</h2><p class="blocked">Décision éditoriale requise</p>` +
+            `<p>Faits : ${conflict.fact_ids.map(id => `<code>${id}</code>`).join(', ')}</p>` +
+            `<p>Affirmations : ${conflict.claims.join(' / ')}</p>` +
+            `<p>Référence publiée : <code>${conflict.authoritative_fact_id || 'aucune'}</code></p>`;
+          return card;
+        }));
+      } catch { results.textContent = 'JSON invalide : corrigez le rapport avant revue.'; }
+    });
+  </script>
+</body>
+</html>

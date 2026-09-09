@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ntm.local/canon/sources/published_chapter.schema.json",
+  "title": "Published Chapter",
+  "type": "object",
+  "required": [
+    "source_id",
+    "source_type",
+    "facts"
+  ],
+  "properties": {
+    "source_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_type": {
+      "const": "published_chapter"
+    },
+    "title": {
+      "type": "string"
+    },
+    "facts": {
+      "type": "array",
+      "items": {
+        "$ref": "fact.schema.json"
+      },
+      "minItems": 1
+    }
+  },
+  "additionalProperties": false
+}

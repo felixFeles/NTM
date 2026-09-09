@@ -1,4 +1,4 @@
-"""Domain primitives for Novel To Manhwa continuity work."""
+"""Domain primitives and canon-management utilities for Novel To Manhwa."""
 
 from .ingestion import StoryIngestor
 from .retrieval import HybridStoryIndex
