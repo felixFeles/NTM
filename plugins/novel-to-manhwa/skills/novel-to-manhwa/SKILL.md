@@ -64,12 +64,13 @@ The bundled schemas are deliberately provider-neutral JSON templates. Convert to
 
 Use templates in `templates/` as the minimum contract:
 
-- `entity.template.json`: canonical identity, aliases, rules, provenance, and references.
-- `event.template.json`: ordered, sourced state changes.
+- `entity.template.json` and `event.template.json`: compatibility entry points to the versioned `schemas/v1/` entity and append-only state-transition contracts.
+- Entity state uses named compartments: `physical_state`, `health_state`, `appearance_state`, `wardrobe_state`, `inventory_state`, `ownership_state`, `location_state`, `knowledge_state`, `ability_state`, `material_state`, `texture_state`, and `energy_state`.
+- Each event has a dated timeline coordinate (`date`, `order`, `scene_id`), source evidence, and complete compartment replacements. Reconstruct prior scenes by replaying events rather than changing prior state.
 - `scene-state.template.json`: resolved input contract for each scene.
 - `continuity-report.template.json`: machine-readable QA output.
 
-Every mutable fact must be represented as a sourced event or state transition. Examples: acquiring `item_ring_001`, changing its owner, receiving a scar, changing outfits, learning a secret, or dying.
+Every mutable fact must be represented as a sourced event or state transition. Examples: acquiring `item_ring_001`, changing its owner, receiving a scar, changing outfits, learning a secret, or dying. Use `ntm.continuity.CanonStateResolver(...).resolve_entity_state(entity_id, timeline_position)` to reconstruct the state supplied to a scene; this returns a detached snapshot and never mutates history.
 
 ## Visual bible rules
 

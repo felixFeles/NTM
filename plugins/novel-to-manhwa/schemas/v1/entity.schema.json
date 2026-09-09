@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ntm.dev/schemas/novel-to-manhwa/v1/entity.schema.json",
+  "title": "NTM canonical entity v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "id", "type", "name", "initial_state", "provenance"],
+  "properties": {
+    "schema_version": {"const": "ntm/entity/v1"},
+    "id": {"type": "string", "pattern": "^[a-z]+(?:_[a-z0-9]+)+$"},
+    "type": {"type": "string", "enum": ["character", "item", "location", "outfit", "power", "faction", "creature"]},
+    "name": {"type": "string", "minLength": 1},
+    "aliases": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "status": {"type": "string", "enum": ["active", "inactive", "destroyed", "deceased", "unknown"]},
+    "canonical_design": {"type": "object"},
+    "visual_references": {"type": "array", "items": {"type": "string"}},
+    "rules": {"type": "array", "items": {"type": "string"}},
+    "initial_state": {"$ref": "#/$defs/entityState"},
+    "provenance": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/source"}}
+  },
+  "$defs": {
+    "source": {"type": "object", "additionalProperties": false, "required": ["chapter_id", "locator"], "properties": {"chapter_id": {"type": "string", "minLength": 1}, "locator": {"type": "string", "minLength": 1}, "excerpt": {"type": "string"}}},
+    "entityState": {"type": "object", "additionalProperties": false, "properties": {
+      "physical_state": {"type": "object", "additionalProperties": true},
+      "health_state": {"type": "object", "additionalProperties": true},
+      "appearance_state": {"type": "object", "additionalProperties": true},
+      "wardrobe_state": {"type": "object", "additionalProperties": true},
+      "inventory_state": {"type": "object", "additionalProperties": true},
+      "ownership_state": {"type": "object", "additionalProperties": true},
+      "location_state": {"type": "object", "additionalProperties": true},
+      "knowledge_state": {"type": "object", "additionalProperties": true},
+      "ability_state": {"type": "object", "additionalProperties": true},
+      "material_state": {"type": "object", "additionalProperties": true},
+      "texture_state": {"type": "object", "additionalProperties": true},
+      "energy_state": {"type": "object", "additionalProperties": true}
+    }}
+  }
+}
