@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ntm.local/canon/sources/fact.schema.json",
+  "title": "Canon fact",
+  "type": "object",
+  "required": ["fact_id", "claim", "canon_status", "audience_visibility", "character_knowledge"],
+  "properties": {
+    "fact_id": {"type": "string", "minLength": 1},
+    "claim_key": {"type": "string", "minLength": 1, "description": "Stable key used to compare claims across sources."},
+    "claim": {"type": "string", "minLength": 1},
+    "canon_status": {"enum": ["published", "approved_private", "provisional", "superseded", "non_canon"]},
+    "audience_visibility": {"enum": ["author_only", "reader_hidden", "reader_known"]},
+    "character_knowledge": {
+      "type": "object",
+      "description": "Knowledge state indexed by character identifier.",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["state"],
+        "properties": {
+          "state": {"enum": ["unknown", "suspects", "knows"]},
+          "evidence": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "supersedes": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "notes": {"type": "string"}
+  },
+  "additionalProperties": false
+}

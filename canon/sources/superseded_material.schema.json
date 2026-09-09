@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ntm.local/canon/sources/superseded_material.schema.json",
+  "title": "Superseded Material",
+  "type": "object",
+  "required": [
+    "source_id",
+    "source_type",
+    "facts"
+  ],
+  "properties": {
+    "source_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_type": {
+      "const": "superseded_material"
+    },
+    "title": {
+      "type": "string"
+    },
+    "facts": {
+      "type": "array",
+      "items": {
+        "$ref": "fact.schema.json"
+      },
+      "minItems": 1
+    }
+  },
+  "additionalProperties": false
+}

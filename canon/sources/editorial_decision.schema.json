@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ntm.local/canon/sources/editorial_decision.schema.json",
+  "title": "Editorial Decision",
+  "type": "object",
+  "required": [
+    "source_id",
+    "source_type",
+    "facts"
+  ],
+  "properties": {
+    "source_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_type": {
+      "const": "editorial_decision"
+    },
+    "title": {
+      "type": "string"
+    },
+    "facts": {
+      "type": "array",
+      "items": {
+        "$ref": "fact.schema.json"
+      },
+      "minItems": 1
+    }
+  },
+  "additionalProperties": false
+}
