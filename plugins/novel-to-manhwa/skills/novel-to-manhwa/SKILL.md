@@ -55,7 +55,7 @@ The bundled schemas are deliberately provider-neutral JSON templates. Convert to
 3. **Resolve:** load the canon slice for the chapter's timeline position, including entity history and visual references.
 4. **Validate before generation:** reject unavailable items, impossible locations, unrevealed knowledge, invalid abilities, unhealed injuries, ownership conflicts, and unapproved wardrobe changes.
 5. **Storyboard:** create scene/panel specifications that refer to IDs—not only free-form names—and bind each panel to a scene state.
-6. **Generate:** create provider-neutral generation requests containing prompt, negative constraints, entity references, and expected scene state. A provider adapter may then produce assets.
+6. **Generate:** create one provider-neutral panel request per JSON file at `generation/requests/<chapter_id>/<request_id>.json`; the filename must exactly match `request_id`. Validate paths with `scripts/validate_generation_requests.py`. Each request must conform to `panel-generation-request.schema.json` and contain prompt, negative constraints, composition, camera, lighting, style, text/bubbles, resolved entity state, spatial relations, references, textures, provider parameters, and reproducibility hashes. A provider adapter may then produce assets.
 7. **Inspect:** use a vision/OCR provider adapter when configured to compare panels against scene state and visual reference requirements. Otherwise report visual checks as `not_run`, never `pass`.
 8. **Report:** write `reports/chapter_<id>_continuity_report.json` with findings, evidence, severity, and disposition.
 9. **Finalize:** publish only when blocking findings are zero. Preserve all intermediate artifacts and hashes for reproducibility.
@@ -68,6 +68,7 @@ Use templates in `templates/` as the minimum contract:
 - Entity state uses named compartments: `physical_state`, `health_state`, `appearance_state`, `wardrobe_state`, `inventory_state`, `ownership_state`, `location_state`, `knowledge_state`, `ability_state`, `material_state`, `texture_state`, and `energy_state`.
 - Each event has a dated timeline coordinate (`date`, `order`, `scene_id`), source evidence, and complete compartment replacements. Reconstruct prior scenes by replaying events rather than changing prior state.
 - `scene-state.template.json`: resolved input contract for each scene.
+- `panel-generation-request.schema.json`: provider-neutral contract for one reproducible panel-generation request. References require an ID, a project-relative image path such as `references/item_ring_001/canonical.png`, and a role (`identity`, `material`, `texture`, `outfit`, `location`, or `pose`).
 - `continuity-report.template.json`: machine-readable QA output.
 
 Every mutable fact must be represented as a sourced event or state transition. Examples: acquiring `item_ring_001`, changing its owner, receiving a scar, changing outfits, learning a secret, or dying. Use `ntm.continuity.CanonStateResolver(...).resolve_entity_state(entity_id, timeline_position)` to reconstruct the state supplied to a scene; this returns a detached snapshot and never mutates history.
