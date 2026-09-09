@@ -1,18 +1,4 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Canonical entity",
-  "type": "object",
-  "required": ["id", "type", "name", "status", "rules", "provenance"],
-  "properties": {
-    "id": {"type": "string", "pattern": "^[a-z]+(?:_[a-z0-9]+)+$"},
-    "type": {"type": "string", "enum": ["character", "item", "location", "outfit", "power", "faction", "creature"]},
-    "name": {"type": "string"},
-    "aliases": {"type": "array", "items": {"type": "string"}},
-    "status": {"type": "string", "enum": ["active", "inactive", "destroyed", "deceased", "unknown"]},
-    "canonical_design": {"type": "object"},
-    "visual_references": {"type": "array", "items": {"type": "string"}},
-    "rules": {"type": "array", "items": {"type": "string"}},
-    "provenance": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/source"}}
-  },
-  "$defs": {"source": {"type": "object", "required": ["chapter_id", "locator"], "properties": {"chapter_id": {"type": "string"}, "locator": {"type": "string"}, "excerpt": {"type": "string"}}}}
+  "$ref": "../schemas/v1/entity.schema.json"
 }
