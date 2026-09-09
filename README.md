@@ -5,7 +5,7 @@
 ## Install for any Codex agent
 
 ```bash
-git clone <YOUR_GITHUB_REPOSITORY_URL> ntm
+git clone https://github.com/felixFeles/NTM.git ntm
 cd ntm
 codex plugin marketplace add .
 ```
