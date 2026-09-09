@@ -57,7 +57,9 @@ def main() -> int:
         "# Panel generation requests\n\n"
         "Store each request at `<chapter_id>/<request_id>.json`. The filename must "
         "match the request's `request_id`. Validate storage with "
-        "`tools/validate_generation_requests.py generation/requests`.\n",
+        "`tools/validate_generation_requests.py generation/requests`. Requests also need "
+        "`timeline_order`; validation blocks a visible entity without a validated canonical "
+        "reference or a required texture without a validated texture map.\n",
         args.force,
     )
     validator_target = root / "tools" / "validate_generation_requests.py"
@@ -66,6 +68,23 @@ def main() -> int:
         print(f"wrote {validator_target}")
     else:
         print(f"preserved {validator_target}")
+    reference_builder_target = root / "tools" / "build_scene_references.py"
+    if not reference_builder_target.exists() or args.force:
+        shutil.copyfile(SCRIPT_DIR / "build_scene_references.py", reference_builder_target)
+        print(f"wrote {reference_builder_target}")
+    else:
+        print(f"preserved {reference_builder_target}")
+    write_file(
+        root / "references" / "README.md",
+        "# Visual reference manifests\n\n"
+        "Every visually important entity must have `references/<entity_id>/manifest.json` "
+        "conforming to `reference-manifest.schema.json`. A manifest records its canonical "
+        "identity sheet, required views, state variants, palette, materials, texture maps, "
+        "geometry constraints, version history, and hash/provenance/validation/query rules for "
+        "every asset. Build a scene list with `tools/build_scene_references.py scene.json "
+        "--output generation/references/<scene_id>.json`.\n",
+        args.force,
+    )
     manifest = {"format": "ntm-project/v1", "canon_policy": "canon_over_model_memory", "status": "initialized"}
     write_file(root / "ntm-project.json", json.dumps(manifest, indent=2) + "\n", args.force)
     return 0
