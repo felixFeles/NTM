@@ -136,8 +136,10 @@ The initialized project separates `canon`, `story`, `storyboard`, `visual_bible`
 | --- | --- |
 | `plugins/novel-to-manhwa/skills/novel-to-manhwa/SKILL.md` | Rules and production workflow applied by Codex agents. |
 | `plugins/novel-to-manhwa/templates/` | Provider-neutral JSON Schema contracts for entities, events, scene states, panel generation requests, and reports. |
+| `plugins/novel-to-manhwa/templates/reference-manifest.schema.json` | Mandatory, auditable visual-reference manifest contract for every important entity. |
 | `plugins/novel-to-manhwa/scripts/init_project.py` | Non-destructive project initializer. |
 | `plugins/novel-to-manhwa/scripts/validate_generation_requests.py` | Enforces chapter request paths and `request_id`-matching file names. |
+| `plugins/novel-to-manhwa/scripts/build_scene_references.py` | Selects validated, timeline/state-applicable reference assets for a resolved scene. |
 | `plugins/novel-to-manhwa/scripts/check_reports.py` | Finalization gate for continuity reports. |
 | `.agents/plugins/marketplace.json` | Repository-local Codex marketplace entry. |
 

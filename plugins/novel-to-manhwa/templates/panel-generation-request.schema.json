@@ -9,6 +9,7 @@
     "request_id",
     "chapter_id",
     "scene_id",
+    "timeline_order",
     "panel_index",
     "send_order",
     "detailed_prompt",
@@ -32,6 +33,7 @@
     "request_id": {"$ref": "#/$defs/id"},
     "chapter_id": {"$ref": "#/$defs/id"},
     "scene_id": {"$ref": "#/$defs/id"},
+    "timeline_order": {"type": "integer", "minimum": 0},
     "panel_index": {"type": "integer", "minimum": 0},
     "send_order": {"type": "integer", "minimum": 0},
     "detailed_prompt": {"type": "string", "minLength": 20},
@@ -134,7 +136,7 @@
       "properties": {
         "reference_id": {"$ref": "#/$defs/id"},
         "path": {"type": "string", "pattern": "^references/[a-z][a-z0-9_]*/[^/]+$"},
-        "role": {"type": "string", "enum": ["identity", "material", "texture", "outfit", "location", "pose"]}
+        "role": {"type": "string", "enum": ["identity", "material", "texture", "outfit", "location", "pose", "surface", "energy", "damage"]}
       }
     },
     "textureRequirement": {

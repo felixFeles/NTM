@@ -8,7 +8,7 @@
     "chapter_id": {"type": "string"},
     "timeline_order": {"type": "integer", "minimum": 0},
     "location_id": {"type": "string"},
-    "entities": {"type": "array", "items": {"type": "object", "required": ["entity_id", "state", "references"], "properties": {"entity_id": {"type": "string"}, "state": {"type": "object"}, "references": {"type": "array", "items": {"type": "string"}}}}},
+    "entities": {"type": "array", "items": {"type": "object", "required": ["entity_id", "state", "references"], "properties": {"entity_id": {"type": "string"}, "visible": {"type": "boolean", "default": true}, "state": {"type": "object"}, "references": {"type": "array", "items": {"type": "string"}}}}},
     "reader_knowledge_ids": {"type": "array", "items": {"type": "string"}},
     "character_knowledge": {"type": "object"},
     "resolved_at": {"type": "string", "format": "date-time"}

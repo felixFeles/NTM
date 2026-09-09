@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ntm.dev/schemas/novel-to-manhwa/v1/reference-manifest.schema.json",
+  "title": "NTM visual reference manifest v1",
+  "description": "Required manifest at references/<entity_id>/manifest.json for every visually important entity.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "entity_id", "visual_importance", "canonical_identity_asset_id", "required_views", "state_variants", "palette", "materials", "texture_maps", "geometry_constraints", "version_history", "assets"],
+  "properties": {
+    "schema_version": {"const": "ntm/reference-manifest/v1"},
+    "entity_id": {"$ref": "#/$defs/id"},
+    "visual_importance": {"const": "important"},
+    "canonical_identity_asset_id": {"$ref": "#/$defs/id"},
+    "required_views": {"type": "array", "minItems": 1, "items": {"type": "string", "enum": ["front", "back", "left", "right", "three_quarter", "top", "detail"]}, "uniqueItems": true},
+    "state_variants": {"type": "array", "items": {"$ref": "#/$defs/stateVariant"}},
+    "palette": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/paletteColor"}},
+    "materials": {"type": "array", "items": {"$ref": "#/$defs/material"}},
+    "texture_maps": {"type": "array", "items": {"$ref": "#/$defs/textureMap"}},
+    "geometry_constraints": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "version_history": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/version"}},
+    "assets": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/asset"}}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+    "hash": {"type": "string", "pattern": "^[A-Fa-f0-9]{64}$"},
+    "paletteColor": {"type": "object", "additionalProperties": false, "required": ["name", "hex"], "properties": {"name": {"type": "string", "minLength": 1}, "hex": {"type": "string", "pattern": "^#[A-Fa-f0-9]{6}$"}}},
+    "material": {"type": "object", "additionalProperties": false, "required": ["name", "finish", "asset_id"], "properties": {"name": {"type": "string", "minLength": 1}, "finish": {"type": "string", "minLength": 1}, "asset_id": {"$ref": "#/$defs/id"}}},
+    "textureMap": {"type": "object", "additionalProperties": false, "required": ["name", "asset_id"], "properties": {"name": {"type": "string", "minLength": 1}, "asset_id": {"$ref": "#/$defs/id"}}},
+    "stateVariant": {"type": "object", "additionalProperties": false, "required": ["name", "asset_id", "state_match"], "properties": {"name": {"type": "string", "minLength": 1}, "asset_id": {"$ref": "#/$defs/id"}, "state_match": {"type": "object"}}},
+    "version": {"type": "object", "additionalProperties": false, "required": ["version", "changed_at", "change_summary", "provenance"], "properties": {"version": {"type": "string", "minLength": 1}, "changed_at": {"type": "string", "format": "date-time"}, "change_summary": {"type": "string", "minLength": 1}, "provenance": {"type": "string", "minLength": 1}}},
+    "asset": {"type": "object", "additionalProperties": false, "required": ["asset_id", "type", "path", "sha256", "validation_status", "provenance", "panel_query_rules"], "properties": {"asset_id": {"$ref": "#/$defs/id"}, "type": {"type": "string", "enum": ["identity_sheet", "outfit_sheet", "material_texture", "surface_detail", "energy_effect", "location_sheet", "damage_variant"]}, "path": {"type": "string", "pattern": "^references/[a-z][a-z0-9_]*/[^/]+$"}, "sha256": {"$ref": "#/$defs/hash"}, "validation_status": {"type": "string", "enum": ["draft", "validated", "rejected", "superseded"]}, "provenance": {"type": "object", "additionalProperties": false, "required": ["source", "recorded_at"], "properties": {"source": {"type": "string", "minLength": 1}, "recorded_at": {"type": "string", "format": "date-time"}}}, "panel_query_rules": {"type": "object", "additionalProperties": false, "required": ["roles"], "properties": {"roles": {"type": "array", "minItems": 1, "items": {"type": "string", "enum": ["identity", "material", "texture", "outfit", "location", "pose", "surface", "energy", "damage"]}, "uniqueItems": true}, "timeline_start": {"type": "integer", "minimum": 0}, "timeline_end": {"type": "integer", "minimum": 0}, "state_match": {"type": "object"}}}}}
+  }
+}
