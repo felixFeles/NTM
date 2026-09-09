@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ntm.local/adaptation/adaptation_decision.schema.json",
+  "title": "Non-canonical adaptation decisions",
+  "type": "object",
+  "required": ["chapter_id", "canonization_rule", "decisions"],
+  "properties": {
+    "chapter_id": {"type": "string", "minLength": 1},
+    "canonization_rule": {
+      "const": "Adaptation decisions are non-canonical and cannot update canon automatically; canon changes require a separately sourced editorial_decision."
+    },
+    "decisions": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/decision"}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "editorial_justification": {
+      "type": "object",
+      "required": ["sources_used", "canonical_rule", "hypothesis", "confidence", "rejected_alternatives", "human_validation_required"],
+      "properties": {
+        "sources_used": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "canonical_rule": {"type": "string", "minLength": 1},
+        "hypothesis": {"type": "string", "minLength": 1},
+        "confidence": {"enum": ["low", "medium", "high"]},
+        "rejected_alternatives": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "human_validation_required": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "decision": {
+      "type": "object",
+      "required": ["decision_id", "addition_type", "proposal", "source_locators", "status", "adaptation_only", "editorial_justification"],
+      "properties": {
+        "decision_id": {"type": "string", "minLength": 1},
+        "addition_type": {"enum": ["undisclosed_outfit", "set_decoration", "additional_dialogue", "scene_transition"]},
+        "proposal": {"type": "string", "minLength": 1},
+        "source_locators": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "status": {"enum": ["proposed", "approved", "rejected"]},
+        "adaptation_only": {"const": true},
+        "editorial_justification": {"$ref": "#/$defs/editorial_justification"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

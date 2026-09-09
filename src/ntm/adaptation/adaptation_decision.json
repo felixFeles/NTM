@@ -1,0 +1,22 @@
+{
+  "chapter_id": "chapter_001",
+  "canonization_rule": "Adaptation decisions are non-canonical and cannot update canon automatically; canon changes require a separately sourced editorial_decision.",
+  "decisions": [
+    {
+      "decision_id": "chapter_001-decision-001",
+      "addition_type": "undisclosed_outfit",
+      "proposal": "Proposed adaptation-only wardrobe choice.",
+      "source_locators": ["chapter_001.md:p3:s1"],
+      "status": "proposed",
+      "adaptation_only": true,
+      "editorial_justification": {
+        "sources_used": ["chapter_001.md:p3:s1"],
+        "canonical_rule": "No published source specifies the wardrobe.",
+        "hypothesis": "A neutral outfit can preserve the stated action without adding a story fact.",
+        "confidence": "low",
+        "rejected_alternatives": ["Do not specify the outfit in the panel brief."],
+        "human_validation_required": true
+      }
+    }
+  ]
+}
