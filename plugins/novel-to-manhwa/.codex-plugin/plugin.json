@@ -1,0 +1,25 @@
+{
+  "name": "novel-to-manhwa",
+  "version": "0.1.0",
+  "description": "A canon-first production workflow for adapting long novels into consistent manhwa.",
+  "author": {
+    "name": "NTM Contributors"
+  },
+  "license": "MIT",
+  "keywords": ["manhwa", "storyboard", "continuity", "canon", "visual bible"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Novel To Manhwa",
+    "shortDescription": "Build canon-first, continuity-safe manhwa pipelines.",
+    "longDescription": "Guides Codex through a structured, testable workflow for adapting long novels into manhwa without treating model memory as canon.",
+    "developerName": "NTM Contributors",
+    "category": "Productivity",
+    "capabilities": ["Interactive", "Write"],
+    "defaultPrompt": [
+      "Initialize a canon-first Novel To Manhwa project.",
+      "Analyze my novel and create the canonical story model.",
+      "Plan a continuity-safe storyboard for the next chapter."
+    ],
+    "brandColor": "#6D28D9"
+  }
+}

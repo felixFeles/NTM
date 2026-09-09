@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Resolved canonical scene state",
+  "type": "object",
+  "required": ["scene_id", "chapter_id", "timeline_order", "location_id", "entities", "resolved_at"],
+  "properties": {
+    "scene_id": {"type": "string"},
+    "chapter_id": {"type": "string"},
+    "timeline_order": {"type": "integer", "minimum": 0},
+    "location_id": {"type": "string"},
+    "entities": {"type": "array", "items": {"type": "object", "required": ["entity_id", "state", "references"], "properties": {"entity_id": {"type": "string"}, "state": {"type": "object"}, "references": {"type": "array", "items": {"type": "string"}}}}},
+    "reader_knowledge_ids": {"type": "array", "items": {"type": "string"}},
+    "character_knowledge": {"type": "object"},
+    "resolved_at": {"type": "string", "format": "date-time"}
+  }
+}
